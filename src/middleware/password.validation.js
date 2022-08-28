@@ -1,11 +1,13 @@
 const passwordValidation = (req, res, next) => {
   const { password } = req.body;
-  const minCharacters = 4;
-  const maxCharacters = 8;
-  if (Number(password) && password.length <= maxCharacters && password.length >= minCharacters) {
-    return next();
+  const minCharacters = 6;
+  if (!password) {
+    return res.status(400).json({ message: 'O campo "password" é obrigatório' });
   }
-  return res.status(400).json({ message: 'invalid data' });
+  if (password.length < minCharacters) {
+    return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
+  }
+  return next();
 };
 
 module.exports = passwordValidation;
