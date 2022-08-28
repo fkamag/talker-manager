@@ -1,6 +1,7 @@
 const express = require('express');
 const talkerDb = require('../data/talker.db');
 const emailValidation = require('../middleware/email.validation');
+const generateToken = require('../middleware/generateToken');
 const passwordValidation = require('../middleware/password.validation');
 
 const router = express.Router();
@@ -29,7 +30,8 @@ router.get('/talker/:id', async (req, res) => {
 });
 
 router.post('/login', emailValidation, passwordValidation, (req, res) => {
-  res.status(200).json({ token: '7mqaVRXJSp886CGr' });
+  const token = generateToken();
+  res.status(200).json({ token });
 });
 
 module.exports = router;
