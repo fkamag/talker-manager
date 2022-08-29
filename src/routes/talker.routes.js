@@ -23,7 +23,6 @@ router.get('/talker', async (req, res) => {
 
 router.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const result = await talkers();
   const talker = result.find((item) => item.id === Number(id));
 
@@ -42,9 +41,24 @@ router.post('/login', emailValidation, passwordValidation, (req, res) => {
 router.post('/talker', authValidation, nameValidation, ageValidation,
 talkValidation, rateValidation, async (req, res) => {
   const data = req.body;
-  const dataWithId = { ...data, id: 5 };
+  const array = await talkers();
+  const dataWithId = { id: array.length + 1, ...data };
   await talkerDb.insert(dataWithId);
   res.status(201).json(dataWithId);
+});
+
+router.put('/talker/:id', authValidation, nameValidation, ageValidation,
+talkValidation, rateValidation, async (req, res) => {
+  const id = Number(req.params.id);
+  const array = await talkers();
+  const talker = array.find((t) => t.id === id);
+  if (talker) {
+    const index = array.indexOf(talker);
+    const updated = { id, ...req.body };
+    array.splice(index, 1, updated);
+    await talkerDb.save(array);
+    return res.status(200).json(updated);
+  }
 });
 
 module.exports = router;
