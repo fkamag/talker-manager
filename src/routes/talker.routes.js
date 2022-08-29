@@ -3,6 +3,7 @@ const talkerDb = require('../data/talker.db');
 const emailValidation = require('../middleware/email.validation');
 const generateToken = require('../middleware/generateToken');
 const passwordValidation = require('../middleware/password.validation');
+const authValidation = require('../middleware/auth.validation');
 
 const router = express.Router();
 
@@ -32,6 +33,13 @@ router.get('/talker/:id', async (req, res) => {
 router.post('/login', emailValidation, passwordValidation, (req, res) => {
   const token = generateToken();
   res.status(200).json({ token });
+});
+
+router.post('/talker', authValidation, async (req, res) => {
+  const data = req.body;
+  const dataWithId = { ...data, id: 5 };
+  await talkerDb.insert(dataWithId);
+  res.status(201).json(dataWithId);
 });
 
 module.exports = router;

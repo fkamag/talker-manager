@@ -9,6 +9,16 @@ const read = async () => {
   return result;
 };
 
+const save = (content) => fs.writeFile(file, JSON.stringify(content));
+
+const insert = async (item) => {
+  const users = await read();
+  users.push(item);
+  await save(users);
+};
+
 module.exports = {
   read,
+  save,
+  insert,
 };
