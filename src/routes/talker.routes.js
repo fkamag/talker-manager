@@ -6,6 +6,8 @@ const passwordValidation = require('../middleware/password.validation');
 const authValidation = require('../middleware/auth.validation');
 const nameValidation = require('../middleware/name.validation');
 const ageValidation = require('../middleware/age.validation');
+const talkValidation = require('../middleware/talk.validation');
+const rateValidation = require('../middleware/rate.validation');
 
 const router = express.Router();
 
@@ -37,7 +39,8 @@ router.post('/login', emailValidation, passwordValidation, (req, res) => {
   res.status(200).json({ token });
 });
 
-router.post('/talker', authValidation, nameValidation, ageValidation, async (req, res) => {
+router.post('/talker', authValidation, nameValidation, ageValidation,
+talkValidation, rateValidation, async (req, res) => {
   const data = req.body;
   const dataWithId = { ...data, id: 5 };
   await talkerDb.insert(dataWithId);
