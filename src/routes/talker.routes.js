@@ -4,6 +4,7 @@ const emailValidation = require('../middleware/email.validation');
 const generateToken = require('../middleware/generateToken');
 const passwordValidation = require('../middleware/password.validation');
 const authValidation = require('../middleware/auth.validation');
+const nameValidation = require('../middleware/name.validation');
 
 const router = express.Router();
 
@@ -35,7 +36,7 @@ router.post('/login', emailValidation, passwordValidation, (req, res) => {
   res.status(200).json({ token });
 });
 
-router.post('/talker', authValidation, async (req, res) => {
+router.post('/talker', authValidation, nameValidation, async (req, res) => {
   const data = req.body;
   const dataWithId = { ...data, id: 5 };
   await talkerDb.insert(dataWithId);
