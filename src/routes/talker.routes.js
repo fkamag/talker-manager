@@ -61,4 +61,12 @@ talkValidation, rateValidation, async (req, res) => {
   }
 });
 
+router.delete('/talker/:id', authValidation, async (req, res) => {
+  const id = Number(req.params.id);
+  const array = await talkers();
+  const talker = array.filter((t) => t.id !== id);
+  await talkerDb.save(talker);
+  return res.status(204).end();
+});
+
 module.exports = router;
