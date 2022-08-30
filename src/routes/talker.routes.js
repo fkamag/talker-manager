@@ -21,6 +21,13 @@ router.get('/talker', async (req, res) => {
   res.status(200).json(result);
 });
 
+router.get('/talker/search', authValidation, async (req, res) => {
+  const { q } = req.query;
+  const array = await talkers();
+  const result = array.filter((item) => item.name.includes(q));
+  return res.status(200).json(result);
+});
+
 router.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const result = await talkers();
